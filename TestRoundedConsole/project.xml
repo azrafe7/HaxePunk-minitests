@@ -3,13 +3,15 @@
 	<!-- NMML reference: https://gist.github.com/1763850 -->
 	
 	<!-- metadata, make sure 'package' is at least 3 segments (ie. com.mycompany.myproject) -->
-	<meta title="TestLayers" package="com.haxepunk.tests" version="0.1" company="azrafe7" />
+	<meta title="TestConsole" package="com.haxepunk.tests" version="0.1" company="azrafe7" />
 	
 	<!-- output -->
-	<app main="Main" file="TestLayers" path="bin" />
+	<app main="Main" file="TestConsole" path="bin" />
 	
-	<window background="#000000" fps="60" />
+	<window background="#202020" fps="60" />
 	<window width="640" height="480" unless="mobile" />
+	<!--<window width="300" height="300" unless="mobile" />-->
+	<!--<window width="400" height="600" unless="mobile" />-->
 	<window orientation="landscape" vsync="false" antialiasing="0" if="cpp" />
 	
 	<set name="SWF_VERSION" value="11.2" />

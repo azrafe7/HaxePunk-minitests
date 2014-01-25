@@ -1,5 +1,6 @@
 package;
 
+import com.haxepunk.Scene;
 import flash.system.System;
 import com.haxepunk.Entity;
 import com.haxepunk.graphics.Text;
@@ -12,7 +13,7 @@ import com.haxepunk.World;
  * ...
  * @author azrafe7
  */
-class TestLayerScene extends World
+class TestLayerScene extends Scene
 {
 
 	public var images:Array<Text>;
