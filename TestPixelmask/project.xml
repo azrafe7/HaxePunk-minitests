@@ -38,4 +38,7 @@
 	<!-- optimize output -->
 	<haxeflag name="-dce std" />
 	
+	<!-- advanced telemetry for use with Scout -->
+	<haxeflag name="-D advanced-telemetry" if="flash" />
+	
 </project>

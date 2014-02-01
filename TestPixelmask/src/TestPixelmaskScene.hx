@@ -154,7 +154,6 @@ class TestPixelmaskScene extends Scene
 		pixelmask2.x = 10;
 		pixelmask2.y = 10;
 		
-		
 		// Imagemask
 		skelSprite = new Spritemap(SKELETON_SPRITE, 64, 64);
 		skelSprite.add("WALK_RIGHT", HXP.frames(28, 35), 1);
@@ -219,8 +218,9 @@ class TestPixelmaskScene extends Scene
 		}
 		
 		// rotate/update imageMask
-		skelSprite.angle = 90;
-		//imageMask.update();
+		skelSprite.angle += 2;
+		skelSprite.scale = Math.abs(Math.sin(skelSprite.angle/100)) + 1;
+		imageMask.update();
 		
 		HXP.clear(hitEntities);
 		eActive.collideTypesInto(["hitbox", "mask", "circle", "grid", "polygon", "pixelmask", "imagemask"], eActive.x, eActive.y, hitEntities);
@@ -232,14 +232,15 @@ class TestPixelmaskScene extends Scene
 			if (messages.length > MAX_MESSAGES) messages.splice(0, 1);
 			text.text = messages.join("\n");
 			
-			HXP.alarm(.2, function (e:Dynamic):Void 
-			{
-				messages.splice(0, 1);
-				text.text = messages.join("\n");
-			});
+			HXP.alarm(.2, updateMessages);
 		}
 
-		if (Math.random() < .1) trace(BitmapDataPool.hits, BitmapDataPool.total);
+		if (Math.random() < .1) trace(BitmapDataPool.hits, BitmapDataPool.requests);
+	}
+	
+	public function updateMessages(o:Dynamic):Void {
+		messages.splice(0, 1);
+		text.text = messages.join("\n");
 	}
 	
 	public function rotate(poly:Polygon, image:Image, angle:Float):Void 
