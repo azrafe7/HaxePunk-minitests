@@ -1,5 +1,6 @@
 package ;
 
+import com.haxepunk.RenderMode;
 import flash.display.BitmapData;
 import flash.events.KeyboardEvent;
 import flash.filters.GlowFilter;
@@ -45,7 +46,7 @@ class Main extends Engine
 {
 	
     public function new() {
-        super(640, 480, 60, false);
+        super(740, 400, 30, false, RenderMode.BUFFER);
     }
 	
     override public function init():Void {
