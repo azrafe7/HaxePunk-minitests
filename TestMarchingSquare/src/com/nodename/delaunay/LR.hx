@@ -1,4 +1,4 @@
-package com.mindrocks.delaunay;
+package com.nodename.delaunay;
 
 class LR {
 	public static var LEFT:LR = new LR("left");

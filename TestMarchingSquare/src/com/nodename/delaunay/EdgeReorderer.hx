@@ -1,4 +1,4 @@
-package com.mindrocks.delaunay;
+package com.nodename.delaunay;
 
 
 

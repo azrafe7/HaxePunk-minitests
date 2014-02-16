@@ -1,6 +1,6 @@
-package com.mindrocks.delaunay;
+package com.nodename.delaunay;
 
-import com.mindrocks.geom.LineSegment;
+import com.nodename.geom.LineSegment;
 import flash.display.BitmapData;
 import flash.display.CapsStyle;
 import flash.display.Graphics;

@@ -1,6 +1,6 @@
-package com.mindrocks.delaunay;
+package com.nodename.delaunay;
 
-import com.mindrocks.delaunay.IDisposable;
+import com.nodename.delaunay.IDisposable;
 
 import flash.geom.Point;
 

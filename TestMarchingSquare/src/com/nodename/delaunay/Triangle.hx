@@ -1,6 +1,6 @@
-package com.mindrocks.delaunay;
+package com.nodename.delaunay;
 
-using com.mindrocks.delaunay.ArrayHelper;
+using com.nodename.delaunay.ArrayHelper;
 
 
 class Triangle {

@@ -46,7 +46,7 @@ class Main extends Engine
 {
 	
     public function new() {
-        super(740, 400, 30, false, RenderMode.BUFFER);
+        super(800, 400, 30, false, RenderMode.BUFFER);
     }
 	
     override public function init():Void {

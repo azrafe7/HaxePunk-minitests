@@ -1,11 +1,11 @@
-package com.mindrocks.delaunay;
+package com.nodename.delaunay;
 
+import com.haxepunk.Mask;
 import flash.geom.Point;
 import flash.display.BitmapData;
 
-import com.mindrocks.geom.LineSegment;
+import com.nodename.geom.LineSegment;
 
-//using com.mindrocks.delaunay.ArrayHelper;
 
 class SelectHelper {
 
@@ -36,7 +36,7 @@ class SelectHelper {
 		return edgesToTest.filter(
 			function (edge:Edge):Bool {
 				var delaunayLineBmp = edge.makeDelaunayLineBmp();
-				var notIntersecting = !(keepOutMask.hitTest(zeroPoint, 1, delaunayLineBmp, zeroPoint, 1));
+				var notIntersecting = !(Mask.hitTest(keepOutMask, zeroPoint, 1, delaunayLineBmp, zeroPoint, 1));
 				delaunayLineBmp.dispose();
 				return notIntersecting;
 			}

@@ -1,12 +1,12 @@
-package com.mindrocks.delaunay;
+package com.nodename.delaunay;
 
-import com.mindrocks.geom.Circle;
-import com.mindrocks.delaunay.IDisposable;
+import com.nodename.geom.Circle;
+import com.nodename.delaunay.IDisposable;
 import flash.display.BitmapData;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
-using com.mindrocks.delaunay.ArrayHelper;
+using com.nodename.delaunay.ArrayHelper;
 
 
 class SiteList implements IDisposable {

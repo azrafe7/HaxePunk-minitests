@@ -1,11 +1,11 @@
-package com.mindrocks.delaunay;
+package com.nodename.delaunay;
 
-import com.mindrocks.geom.Polygon;
-import com.mindrocks.geom.Winding;
+import com.nodename.geom.Polygon;
+import com.nodename.geom.Winding;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
-using com.mindrocks.delaunay.ArrayHelper;
+using com.nodename.delaunay.ArrayHelper;
 
 
 class Site implements ICoord

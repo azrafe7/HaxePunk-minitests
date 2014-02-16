@@ -13,16 +13,16 @@
  */
 
 
-package com.mindrocks.delaunay;
+package com.nodename.delaunay;
 
-import com.mindrocks.geom.Circle;
-import com.mindrocks.geom.LineSegment;
+import com.nodename.geom.Circle;
+import com.nodename.geom.LineSegment;
 import flash.display.BitmapData;
 import flash.geom.Point;
 import flash.geom.Rectangle;
-import com.mindrocks.delaunay.SelectHelper;
+import com.nodename.delaunay.SelectHelper;
 
-using com.mindrocks.delaunay.ArrayHelper;
+using com.nodename.delaunay.ArrayHelper;
 
 class Voronoi {
 	private var _sites:SiteList;

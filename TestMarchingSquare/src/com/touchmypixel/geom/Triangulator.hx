@@ -1,207 +1,181 @@
-﻿ /* 
+/*
+ * Example application to show how to use Ear Clipping to create convex polygons from arbitary concave ones
+ * Click to create vertexes. Press any key to clear everything!
+ * Make sure you draw in a CCW direction.
+ * 
  * Based on JSFL util by mayobutter (Box2D Forums)
  * and Eric Jordan (http://www.ewjordan.com/earClip/) Ear Clipping experiment in Processing
  * 
  * Tarwin Stroh-Spijer - Touch My Pixel - http://www.touchmypixel.com/
+ *
+ * C# Port by Ben Baker - Headsoft - http://headsoft.com.au/
+ *
  * */
-
 package com.touchmypixel.geom;
 
-import com.touchmypixel.geom.Polygon;
 import flash.geom.Point;
 
+class Triangulator
+{
 
-class Triangulator {
-	
-	/**
-	 * Give it an array of points (vertices), returns an array of Triangles.
-	 */ 
-	public static function triangulate(points:Array<Point>):Array<Triangle>
+	/* give it an array of points (vertexes)
+	 * returns an array of Triangles
+	 * */
+	public static function triangulate(v:Array<Point>):Array<Triangle> 
 	{
-		var xA = new Array<Float>();
-		var yA = new Array<Float>();
-		
-		for (p in points) {
-			xA.push(p.x);
-			yA.push(p.y);
-		}
-		
-		return triangulateFromFlatArrays(xA, yA);
-	}
-	
-	/**
-	 * Give it x and y arrays of coords, returns an array of Triangles.
-	 */ 
-	public static function triangulateFromFlatArrays(xv:Array<Float>, yv:Array<Float>):Array<Triangle>
-	{
-		if (xv.length < 3 || yv.length < 3 || yv.length != xv.length) {
-			throw "Both arrays must be of the same length and have at least 3 vertices.";
-		}
-		
-		var i:Int = 0;
-		var vNum:Int = xv.length;
-	  
-		var buffer = new Array<Triangle>();
-		var bufferSize:Int = 0;
-		var xrem = new Array<Float>();
-		var yrem = new Array<Float>();
-		
-		for (i in 0...vNum) {
-			xrem[i] = xv[i];
-			yrem[i] = yv[i];
-		}
+		if (v.length < 3)
+			return null;
 
-		while (vNum > 3){
-			//Find an ear
-			var earIndex = -1;
-			for (i in 0...vNum) {
-				if (isEar(i, xrem, yrem)) {
+		var remList:Array<Point> = new Array<Point>();
+		for (p in v) remList.push(p.clone());
+		
+		var retList:Array<Triangle> = new Array<Triangle>();
+
+		while (remList.length > 3)
+		{
+			var earIndex:Int = -1;
+
+			for (i in 0...remList.length)
+			{
+				if (isEar(i, remList))
+				{
 					earIndex = i;
 					break;
 				}
 			}
 
-			//If we still haven't found an ear, we're screwed.
-			//The user did Something Bad, so return null.
-			//This will probably crash their program, since
-			//they won't bother to check the return value.
-			//At this we shall laugh, heartily and with great gusto.
-			if (earIndex == -1) {
-				trace('No ear found');
+			if (earIndex == -1)
 				return null;
-			}
 
-			//Clip off the ear:
-			//  - remove the ear tip from the list
+			var newList:Array<Point> = new Array<Point>();
+			for (p in remList) newList.push(p.clone());
 
-			//Opt note: actually creates a new list, maybe
-			//this should be done in-place instead.  A linked
-			//list would be even better to avoid array-fu.
-			--vNum;
-			var newx = new Array<Float>();
-			var newy = new Array<Float>();
-			var currDest:Int = 0;
-			for (i in 0...vNum) {
-				if (currDest == earIndex) ++currDest;
-				newx[i] = xrem[currDest];
-				newy[i] = yrem[currDest];
-				++currDest;
-			}
+			newList.splice(earIndex, 1);
 
-			//  - add the clipped triangle to the triangle list
-			var under:Int = earIndex == 0 ? xrem.length - 1 : earIndex - 1;
-			var over:Int = (earIndex == xrem.length - 1) ? 0 : earIndex + 1;
-			var toAdd:Triangle = Triangle.fromFlatArray([xrem[earIndex], yrem[earIndex], xrem[over], yrem[over], xrem[under], yrem[under]]);
-			buffer[bufferSize] = toAdd;
-			++bufferSize;
-				
-			//  - replace the old list with the new one
-			xrem = newx;
-			yrem = newy;
+			var under:Int = (earIndex == 0 ? remList.length - 1 : earIndex - 1);
+			var over:Int = (earIndex == remList.length - 1 ? 0 : earIndex + 1);
+
+			retList.push(new Triangle(remList[earIndex], remList[over], remList[under]));
+
+			remList = newList;
 		}
-		
-		var toAddMore:Triangle = Triangle.fromFlatArray([xrem[1], yrem[1], xrem[2], yrem[2], xrem[0], yrem[0]]);
-		buffer[bufferSize] = toAddMore;
-		++bufferSize;
 
-		return buffer;
+		retList.push(new Triangle(remList[1], remList[2], remList[0]));
+
+		return retList;
 	}
-	
-	/**
-	 * Give it an array of Triangles, returns an array of Polygons.
-	 */ 
-	public static function polygonizeTriangles(triangulated:Array<Triangle>):Array<Polygon>
-	{
-		var polys:Array<Polygon>;
-		var polyIndex:Int = 0;
 
-		var i:Int = 0;
-		
-		if (triangulated == null) {
+	/* takes: array of Triangles 
+	 * returns: array of Polygons
+	 * */
+	public static function polygonizeTriangles(triangulated:Array<Triangle>):Array<Polygon> 
+	{
+		var polys:Array<Polygon> = new Array<Polygon>();
+
+		if (triangulated == null)
+		{
 			return null;
-		} else {
-			polys = new Array<Polygon>();
-			var covered = new Array<Bool>();
-			
-			for (i in 0...triangulated.length) {
+		}
+		else
+		{
+			var covered:Array<Bool> = new Array<Bool>();
+			for (i in 0...triangulated.length)
+			{
 				covered[i] = false;
 			}
 
 			var notDone:Bool = true;
-			while(notDone) {
-				var currTri:Int = -1;
+
+			while (notDone)
+			{
 				var poly:Polygon = null;
-				for (i in 0...triangulated.length) {
+
+				var currTri:Int = -1;
+				for (i in 0...triangulated.length)
+				{
 					if (covered[i]) continue;
 					currTri = i;
 					break;
 				}
-				if (currTri == -1) {
+				if (currTri == -1)
+				{
 					notDone = false;
-				} else {
-					poly = new Polygon(triangulated[currTri].points);
+				}
+				else
+				{
+					poly = new Polygon(triangulated[currTri].pointList);
 					covered[currTri] = true;
-					for (i in 0...triangulated.length) {
+					for (i in 0...triangulated.length)
+					{
 						if (covered[i]) continue;
 						var newP:Polygon = poly.add(triangulated[i]);
 						if (newP == null) continue;
-						if (newP.isConvex()){
+						if (newP.isConvex())
+						{
 							poly = newP;
 							covered[i] = true;
 						}
 					}
+
+					polys.push(poly);
 				}
-				polys[polyIndex] = poly;
-				polyIndex++;
 			}
 		}
-		
+
 		return polys;
 	}
 
-	/**
-	 * Checks if vertex i is the tip of an ear.
-	 */ 
-	private static function isEar(i:Int, xv:Array<Float>, yv:Array<Float>):Bool
+	// Checks if vertex i is the tip of an ear
+	public static function isEar(i:Int, v:Array<Point>):Bool
 	{
-		var dx0:Float, dy0:Float, dx1:Float, dy1:Float;
-		dx0 = dy0 = dx1 = dy1 = 0;
-		if (i >= xv.length || i < 0 || xv.length < 3) {
+		var dx0 = 0., dy0 = 0., dx1 = 0., dy1 = 0.;
+
+		if (i >= v.length || i < 0 || v.length < 3)
 			return false;
-		}
+
 		var upper:Int = i + 1;
 		var lower:Int = i - 1;
-		if (i == 0) {
-			dx0 = xv[0] - xv[xv.length - 1];
-			dy0 = yv[0] - yv[yv.length - 1];
-			dx1 = xv[1] - xv[0];
-			dy1 = yv[1] - yv[0];
-			lower = xv.length - 1;
-		} else if (i == xv.length - 1) {
-			dx0 = xv[i] - xv[i - 1];
-			dy0 = yv[i] - yv[i - 1];
-			dx1 = xv[0] - xv[i];
-			dy1 = yv[0] - yv[i];
-			upper = 0;
-		} else {
-			dx0 = xv[i] - xv[i - 1];
-			dy0 = yv[i] - yv[i - 1];
-			dx1 = xv[i + 1] - xv[i];
-			dy1 = yv[i + 1] - yv[i];
-		}
-		
-		var cross:Float = (dx0 * dy1) - (dx1 * dy0);
-		if (cross > 0) return false;
-		var myTri:Triangle = Triangle.fromFlatArray([xv[i], yv[i], xv[upper], yv[upper], xv[lower], yv[lower]]);
 
-		for (j in 0...xv.length) {
-			if (!(j == i || j == lower || j == upper)) {
-				_p.setTo(xv[j], yv[j]);
-				if (myTri.isPointInside(_p)) return false;
+		if (i == 0)
+		{
+			dx0 = v[0].x - v[v.length - 1].x;
+			dy0 = v[0].y - v[v.length - 1].y;
+			dx1 = v[1].x - v[0].x;
+			dy1 = v[1].y - v[0].y;
+			lower = v.length - 1;
+		}
+		else if (i == v.length - 1)
+		{
+			dx0 = v[i].x - v[i - 1].x;
+			dy0 = v[i].y - v[i - 1].y;
+			dx1 = v[0].x - v[i].x;
+			dy1 = v[0].y - v[i].y;
+			upper = 0;
+		}
+		else
+		{
+			dx0 = v[i].x - v[i - 1].x;
+			dy0 = v[i].y - v[i - 1].y;
+			dx1 = v[i + 1].x - v[i].x;
+			dy1 = v[i + 1].y - v[i].y;
+		}
+
+		var cross:Float = (dx0 * dy1) - (dx1 * dy0);
+
+		if (cross > 0)
+			return false;
+
+		var myTri:Triangle = new Triangle(v[i], v[upper], v[lower]);
+
+		for (j in 0...v.length)
+		{
+			if (!(j == i || j == lower || j == upper))
+			{
+				if (myTri.isInside(v[j]))
+					return false;
 			}
 		}
+		
 		return true;
 	}
-	
-	private static var _p:Point = new Point();
 }
