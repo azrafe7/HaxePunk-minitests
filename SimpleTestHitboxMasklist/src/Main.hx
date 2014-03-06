@@ -19,7 +19,7 @@ class TestWorld extends World {
 		var h2 = new Hitbox(60, 20, 20, 80);
 		var c = new Circle(30, 0, 0);
 		
-		addMask(new Masklist([h1, h2, c]), "masklist", 50, 50);
+		addMask(new Masklist([h2, h1/*, c*/]), "masklist", 50, 50);
 		addMask(h, "hitbox", 50, 200);
     }
 	
@@ -42,6 +42,7 @@ class TestWorld extends World {
 class Main extends Engine {
     public function new():Void {
         super(800, 600, 60, false);
+		//HXP.screen.scale = 2;
 		HXP.console.enable();
 		HXP.world = new TestWorld();
     }
