@@ -26,9 +26,7 @@
 	<set name="SHOW_CONSOLE" value="1" if="debug" />
 	
 	<!-- assets -->
-	<assets path="../assets/graphics" rename="graphics" include="*.png|*.jpg" />
-	<assets path="../assets/audio" rename="audio" include="*.mp3" if="flash" />
-	<assets path="../assets/audio" rename="audio" include="*.wav|*.ogg" unless="flash" />
+	<assets path="../assets/graphics" rename="gfx" include="*.png|*.jpg" />
 	<assets path="../assets/font" rename="font" include="*.ttf" />
 
 	<icon path="../assets/HaxePunk.svg" />
