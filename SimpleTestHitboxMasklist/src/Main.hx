@@ -13,7 +13,7 @@ import com.haxepunk.utils.Key;
 import flash.geom.Point;
 import flash.system.System;
 
-
+@:access(com.haxepunk.masks)
 class TestWorld extends World {
 	
 	var e:Entity;
@@ -50,6 +50,12 @@ class TestWorld extends World {
 		
 		//e = addMask(new Hitbox(50, 80), "interactive", 300, 300);
 		//e = addMask(new Circle(25), "interactive", 300, 300);
+		
+		var hb = new Hitbox(50, 150, 50, 120);
+		//addMask(hb, "out", 0, 0);
+		trace(hb.collideHitbox(h1));
+		trace(hb.collideHitbox(h2));
+		trace(hb.collideHitbox(h));
     }
 	
 	function printProj(h:Hitbox) {
