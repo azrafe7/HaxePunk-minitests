@@ -45,11 +45,12 @@ class Main extends Engine
 {
 	
     public function new() {
-        super(320, 240, 60, false);
+        super(640, 480, 60, false);
     }
 	
     override public function init():Void {
         super.init();
+		HXP.screen.color = 0x111111;
 		//HXP.screen.scale = 2;
         HXP.console.enable(TraceCapture.No);
 		
